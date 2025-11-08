@@ -1,0 +1,23 @@
+{
+  "navbar": {
+    "home": "Accueil",
+    "learn": "Apprendre",
+    "games": "Jeux",
+    "about": "À propos",
+    "login": "Connexion",
+    "register": "S'inscrire"
+  },
+  "sidebar": {
+    "home": "Accueil",
+    "learn": "Apprendre",
+    "exercice": "Exercices",
+    "play": "Jouer",
+    "invite": "Inviter",
+    "profile": "Profil"
+  },
+  "hero": {
+    "title": "Découvre, Joue et Apprends",
+    "subtitle":"Apprentissage interactif et amusant pour enfants entre 3 et 6 ans",
+    "startButton": "Commencer l'aventure"
+  }
+}

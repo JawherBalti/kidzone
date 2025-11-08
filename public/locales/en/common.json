@@ -1,0 +1,23 @@
+{
+  "navbar": {
+    "home": "Home",
+    "learn": "Learn",
+    "games": "Games",
+    "about": "About",
+    "login": "Login",
+    "register": "register"
+  },
+  "sidebar": {
+    "home": "Home",
+    "learn": "Learn",
+    "exercice": "Exercice",
+    "play": "Play",
+    "invite": "Invite",
+    "profile": "Profile"
+  },
+  "hero": {
+    "title": "Discover, Play and Learn",
+    "subtitle": "Fun interactive learning for children ages 3 - 6",
+    "startButton": "Start the adventure"
+  }
+}
