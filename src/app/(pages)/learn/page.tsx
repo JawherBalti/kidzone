@@ -38,7 +38,14 @@ const categories = [
   },
 
   {
-    key: "words",
+    key: "weather",
+    color: "bg-purple-300",
+    icon: "/assets/learnWords.png",
+    descriptionKey: "learn.wordsDesc",
+  },
+
+  {
+    key: "food",
     color: "bg-purple-300",
     icon: "/assets/learnWords.png",
     descriptionKey: "learn.wordsDesc",

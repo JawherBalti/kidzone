@@ -23,8 +23,7 @@ const Celebration = ({
                 Amazing Job!
             </h2>
             <p className="text-xl text-gray-600 mb-6">
-                You completed all challenges with{" "}
-                {score} correct answers! You can now pick a game to play.
+                You completed all challenges! You can now pick a game to play.
             </p>
             <button
                 onClick={() => {
@@ -40,13 +39,13 @@ const Celebration = ({
             <div className="w-full mt-5 flex gap-5 items-center justify-around">
                 <div
                     onClick={() => setIsPlayingGame1(true)}
-                    className="flex flex-col"
+                    className="flex flex-col w-1/2"
                 >
-                    <div className="relative bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-105 border-4 border-red-400">
+                    <div className="relative w-full bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-105 border-4 border-red-400">
                         {/* Video or GIF */}
                         <img
                             src={gameImage1}
-                            className="w-50 h-44 object-cover rounded-3xl"
+                            className="w-full h-44 object-fill rounded-3xl"
                         />
 
                         {/* Overlay */}
@@ -62,13 +61,13 @@ const Celebration = ({
                 </div>
                 <div
                     onClick={() => setIsPlayingGame2(true)}
-                    className="flex flex-col "
+                    className="flex flex-col w-1/2"
                 >
-                    <div className="relative bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-105 border-4 border-red-400">
+                    <div className="relative w-full bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-105 border-4 border-red-400">
                         {/* Video or GIF */}
                         <img
                             src={gameImage2}
-                            className="w-50 h-44 object-fill rounded-3xl"
+                            className="w-full h-44 object-fill rounded-3xl"
                         />
 
                         {/* Overlay */}
