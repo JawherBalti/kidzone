@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 interface Obstacle {
   id: number;
@@ -15,7 +16,7 @@ interface Tree {
   size: number;
 }
 
-const RabbitGame = ({ setIsPlayingRabbitGame }: any) => {
+const RabbitGame = ({ setIsPlayingRabbitGame, onClose }: any) => {
   const [rabbitPosition, setRabbitPosition] = useState(15);
   const [obstacles, setObstacles] = useState<Obstacle[]>([]);
   const [trees, setTrees] = useState<Tree[]>([]);
@@ -35,6 +36,8 @@ const RabbitGame = ({ setIsPlayingRabbitGame }: any) => {
     isJumping: false,
     lastScoreUpdate: 0,
   });
+
+  const pathname = usePathname();
 
   useEffect(() => {
     gameStateRef.current = {
@@ -419,10 +422,16 @@ const RabbitGame = ({ setIsPlayingRabbitGame }: any) => {
                 </button>
 
                 <button
-                  onClick={() => setIsPlayingRabbitGame(false)}
+                  onClick={
+                    pathname.includes("play")
+                      ? () => onClose && onClose()
+                      : () => setIsPlayingRabbitGame(false)
+                  }
                   className="w-full py-2 md:py-3 bg-gradient-to-r from-green-400 to-blue-400 text-white text-md rounded-full font-bold hover:scale-105 transition-transform shadow-lg"
                 >
-                  Back to learning
+                  {pathname.includes("play")
+                    ? "Back to games"
+                    : "Back to learning"}{" "}
                 </button>
               </div>
             </div>

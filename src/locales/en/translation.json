@@ -19,5 +19,9 @@
     "title": "Discover, Play and Learn",
     "subtitle": "Fun interactive learning for children ages 3 - 6",
     "startButton": "Start the adventure"
+  },
+  "learn": {
+    "title": "What do you want to learn today?",
+    "subtitle": "Tap a box to start your adventure!"
   }
 }

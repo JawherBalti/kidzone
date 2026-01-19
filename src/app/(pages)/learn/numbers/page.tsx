@@ -5,6 +5,8 @@ import ProgressBar from "@/app/components/progressBar/progress-bar";
 import Celebration from "@/app/components/celebration/celebration";
 import PopBuble from "./baloon-pop";
 import PizzaChef from "./pizza-chef";
+import { progressService } from "@/lib/progressService";
+import { useAuth } from "@/app/hooks/useAuth";
 
 interface NumberItem {
   id: number;
@@ -22,6 +24,15 @@ interface NumberItem {
 export default function NumbersPage() {
   // Phase 1: Number Introduction & Counting
   const learningNumbers: NumberItem[] = [
+    {
+      id: 0,
+      number: 0,
+      name: "Zero",
+      emoji: "1️⃣",
+      objects: ["🐛", "🌞", "🚗"],
+      count: 0,
+      visualCount: 0,
+    },
     {
       id: 1,
       number: 1,
@@ -179,7 +190,7 @@ export default function NumbersPage() {
     {
       id: 16,
       number: 0,
-      name: "the butterflies",
+      name: "butterflies",
       emoji: "🦋🦋🦋🦋",
       objects: [],
       count: 4,
@@ -191,7 +202,7 @@ export default function NumbersPage() {
     {
       id: 17,
       number: 0,
-      name: "the stars",
+      name: "stars",
       emoji: "⭐⭐⭐⭐⭐",
       objects: [],
       count: 5,
@@ -203,7 +214,7 @@ export default function NumbersPage() {
     {
       id: 18,
       number: 0,
-      name: "the ducks",
+      name: "ducks",
       emoji: "🦆🦆🦆🦆🦆🦆",
       objects: [],
       count: 6,
@@ -280,6 +291,33 @@ export default function NumbersPage() {
   const [isPlayingPopTheBaloon, setIsPlayingPopTheBaloon] = useState(false);
   const [isPlayingPizzaChef, setIsPlayingPizzaChef] = useState(false);
 
+  const { user, loading } = useAuth();
+
+  // Fetch saved progress on mount
+  useEffect(() => {
+    const fetchProgress = async () => {
+      try {
+        // setLoading(true);
+        const response = await progressService.getLessonProgress("numbers");
+
+        if (response.success && response.progress) {
+          const savedIndex = response.progress.lastPhaseIndex;
+          // setLastSavedPhaseIndex(savedIndex);
+
+          // Initialize at saved position
+          const safeIndex = Math.min(savedIndex, allPhases.length - 1);
+          setCurrentStep(safeIndex);
+          if (savedIndex === allPhases.length) setShowCelebration(true);
+        }
+      } catch (error) {
+        console.error("Error loading progress:", error);
+      } finally {
+        // setLoading(false);
+      }
+    };
+    if (!loading && user) fetchProgress();
+  }, [loading, user]);
+
   const current = allPhases[currentStep];
   const isLearningPhase = currentStep < learningNumbers.length;
   const isRecognitionPhase =
@@ -324,11 +362,43 @@ export default function NumbersPage() {
     return "memory";
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     setFeedback("");
+    // Calculate next phase index
+    const nextPhaseIndex = currentStep + 1;
+
+    // Update progress on backend
+    if (user) {
+      // Only update if user is logged in
+      try {
+        await progressService.updateLessonProgress("numbers", {
+          phaseIndex: nextPhaseIndex, // Send the NEXT phase index
+          totalPhases: allPhases.length,
+        });
+
+        console.log("Progress updated successfully");
+      } catch (error) {
+        console.error("Failed to update progress:", error);
+        // Continue anyway - don't block user from proceeding
+      }
+    }
+
+    // Move to next step in UI
     if (currentStep < allPhases.length - 1) {
-      setCurrentStep((s) => s + 1);
+      setCurrentStep(nextPhaseIndex);
     } else {
+      // Lesson completed - also update progress one more time
+      if (user) {
+        try {
+          // Mark as completed
+          await progressService.updateLessonProgress("numbers", {
+            phaseIndex: allPhases.length, // Last index
+            totalPhases: allPhases.length,
+          });
+        } catch (error) {
+          console.error("Failed to mark lesson as completed:", error);
+        }
+      }
       setShowCelebration(true);
     }
   };
@@ -452,7 +522,7 @@ export default function NumbersPage() {
         return (
           <div className="text-center">
             <h2 className="text-4xl font-bold text-gray-800 mb-6">
-              How many {current.name}?
+              How many {current.name} is there?
             </h2>
 
             {/* Object Display */}

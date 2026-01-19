@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import useIsMdUp from "@/app/hooks/useIsMdUp";
 import SuccessModal from "@/app/components/successModal/success-modal";
+import { usePathname } from "next/navigation";
 
 interface PizzaOrder {
   id: number;
@@ -60,7 +61,10 @@ const ingredientTypes = [
   { type: "shrimp", emoji: "🍤", color: "bg-orange-300" },
 ];
 
-export default function NumberPizzaChef({ setIsPlayingPizzaChef }: any) {
+export default function NumberPizzaChef({
+  setIsPlayingPizzaChef,
+  onClose,
+}: any) {
   const isMdUp = useIsMdUp();
   const [showTips, setShowTips] = useState(false);
 
@@ -82,6 +86,8 @@ export default function NumberPizzaChef({ setIsPlayingPizzaChef }: any) {
   >(null);
 
   const gameAreaRef = useRef<HTMLDivElement>(null);
+
+  const pathname = usePathname();
 
   useEffect(() => {
     setShowTips(false);
@@ -395,7 +401,7 @@ export default function NumberPizzaChef({ setIsPlayingPizzaChef }: any) {
               <div
                 className={`${
                   !isMdUp ? "w-full" : "w-1/3"
-                } h-full bg-white rounded-3xl p-3 px-5 shadow-2xl border-4 border-blue-300`}
+                } h-full bg-white rounded-3xl p-3 px-5 shadow-2xl border-4 border-blue-400`}
               >
                 <div className="space-y-3">
                   <div>
@@ -460,10 +466,16 @@ export default function NumberPizzaChef({ setIsPlayingPizzaChef }: any) {
                     Reset
                   </button>
                   <button
-                    onClick={() => setIsPlayingPizzaChef(false)}
+                    onClick={
+                      pathname.includes("play")
+                        ? () => onClose && onClose()
+                        : () => setIsPlayingPizzaChef(false)
+                    }
                     className="w-full py-2 md:py-3 bg-gradient-to-r from-green-400 to-blue-400 text-white text-md rounded-full font-bold hover:scale-105 transition-transform shadow-lg"
                   >
-                    Back to learning
+                    {pathname.includes("play")
+                      ? "Back to games"
+                      : "Back to learning"}{" "}
                   </button>
                 </div>
               </div>
@@ -473,7 +485,7 @@ export default function NumberPizzaChef({ setIsPlayingPizzaChef }: any) {
               <div className="flex-1 mx-auto h-full w-full">
                 <div
                   ref={gameAreaRef}
-                  className="relative bg-gradient-to-b from-yellow-100 to-orange-100 rounded-3xl shadow-2xl border-4 border-red-300 h-full overflow-hidden"
+                  className="relative bg-gradient-to-b from-yellow-100 to-orange-100 rounded-3xl shadow-2xl border-4 border-green-400 h-full overflow-hidden"
                 >
                   {/* Kitchen Background */}
                   <div className="absolute inset-0">

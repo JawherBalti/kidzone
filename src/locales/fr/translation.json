@@ -19,5 +19,9 @@
     "title": "Découvre, Joue et Apprends",
     "subtitle":"Apprentissage interactif et amusant pour enfants entre 3 et 6 ans",
     "startButton": "Commencer l'aventure"
+  },
+  "learn": {
+    "title": "Que veux-tu apprendre aujourd'hui?",
+    "subtitle": "Choisis une case pour commencer votre aventure !"
   }
 }

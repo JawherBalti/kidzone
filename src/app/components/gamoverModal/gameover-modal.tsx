@@ -1,5 +1,11 @@
 import { motion } from "framer-motion";
-const GameoverModal = ({ score, resetGame, setIsPlayingGame }: any) => {
+const GameoverModal = ({
+  score,
+  resetGame,
+  onClose,
+  setIsPlayingGame,
+  pathname,
+}: any) => {
   return (
     <div className="flex-1 w-full h-full rounded-3xl bg-gradient-to-br from-green-100 to-yellow-100 flex items-center justify-center">
       <motion.div
@@ -9,7 +15,7 @@ const GameoverModal = ({ score, resetGame, setIsPlayingGame }: any) => {
       >
         <div className="text-6xl mb-4">💔</div>
         <h1 className="text-4xl font-bold text-gray-800 mb-4">Game Over</h1>
-                {score ? (
+        {score ? (
           <div className="text-2xl text-gray-600 mb-2">
             Final Score:
             <span className="font-bold text-green-600">{score}</span>
@@ -25,10 +31,14 @@ const GameoverModal = ({ score, resetGame, setIsPlayingGame }: any) => {
             Try again
           </button>
           <button
-            onClick={() => setIsPlayingGame(false)}
+            onClick={
+              pathname.includes("play")
+                ? () => onClose && onClose()
+                : () => setIsPlayingGame(false)
+            }
             className="w-full px-6 py-3 bg-gradient-to-r from-green-400 to-blue-400 text-white text-lg rounded-full font-bold hover:scale-105 transition-transform shadow-lg"
           >
-            Back to learning
+            {pathname.includes("play") ? "Back to games" : "Back to learning"}{" "}
           </button>
         </div>
       </motion.div>

@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import useIsMdUp from "@/app/hooks/useIsMdUp";
+import { usePathname } from "next/navigation";
 
 // TypeScript Interfaces (keep the same)
 interface PuzzlePiece {
@@ -42,7 +43,7 @@ interface GameState {
   hintsUsed: number;
 }
 
-const ShapePuzzleAdventure = ({ setIsPlayingShapePuzzle }: any) => {
+const ShapePuzzleAdventure = ({ setIsPlayingShapePuzzle, onClose }: any) => {
   const isMdUp = useIsMdUp();
   const [workspaceSize, setWorkspaceSize] = useState({
     width: 600,
@@ -53,6 +54,7 @@ const ShapePuzzleAdventure = ({ setIsPlayingShapePuzzle }: any) => {
   const [dragDistance, setDragDistance] = useState<number>(0);
   const [resetKey, setResetKey] = useState(0);
   const [showTips, setShowTips] = useState(false);
+  const pathname = usePathname();
 
   const [gameState, setGameState] = useState<GameState>({
     currentPuzzle: 0,
@@ -604,7 +606,7 @@ const ShapePuzzleAdventure = ({ setIsPlayingShapePuzzle }: any) => {
         id: index,
         x: 50 + index * 70,
         y: workspaceSize.height - 100,
-        rotation: 0,
+        rotation: piece.targetRotation,
         isPlaced: false,
       })
     );
@@ -641,10 +643,10 @@ const ShapePuzzleAdventure = ({ setIsPlayingShapePuzzle }: any) => {
               <div
                 className={`${
                   !isMdUp ? "w-full " : ""
-                } bg-white rounded-3xl p-6 shadow-2xl border-4 border-blue-300`}
+                } bg-white rounded-3xl p-6 shadow-2xl border-4 border-blue-400`}
               >
                 <h2 className="text-xl lg:text-2xl font-bold text-center text-gray-800 mb-4">
-                  Build This: {currentPuzzle.targetImage}
+                  Shape Puzzle
                 </h2>
                 <div className="space-y-4">
                   <div className="bg-yellow-50 p-4 rounded-2xl border-2 border-yellow-200">
@@ -719,10 +721,16 @@ const ShapePuzzleAdventure = ({ setIsPlayingShapePuzzle }: any) => {
                       Reset
                     </button>
                     <button
-                      onClick={() => setIsPlayingShapePuzzle(false)}
+                      onClick={
+                        pathname.includes("play")
+                          ? () => onClose && onClose()
+                          : () => setIsPlayingShapePuzzle(false)
+                      }
                       className="w-full py-2 md:py-3 bg-gradient-to-r from-green-400 to-blue-400 text-white text-md rounded-full font-bold hover:scale-105 transition-transform shadow-lg"
                     >
-                      Back to learning
+                      {pathname.includes("play")
+                        ? "Back to games"
+                        : "Back to learning"}{" "}
                     </button>
                   </div>
                 </div>
@@ -731,7 +739,7 @@ const ShapePuzzleAdventure = ({ setIsPlayingShapePuzzle }: any) => {
             {/* Center - Workspace */}
             {!showTips && (
               <div className="flex-1 lg:col-span-2 w-full h-full">
-                <div className="bg-white rounded-3xl p-6 shadow-2xl border-4 border-green-300 h-full">
+                <div className="bg-white rounded-3xl p-6 shadow-2xl border-4 border-green-400 h-full">
                   {/* Workspace Area */}
                   <div
                     ref={workspaceRef}
@@ -979,7 +987,7 @@ const ShapePuzzleAdventure = ({ setIsPlayingShapePuzzle }: any) => {
                         ? handleNextPuzzle
                         : resetGame
                     }
-                    className="w-full bg-gradient-to-r from-purple-400 to-pink-400 text-white py-4 rounded-2xl font-bold text-xl hover:scale-105 transition-transform shadow-lg"
+                    className="w-full bg-gradient-to-r from-pink-600 to-orange-400 text-white py-4 rounded-2xl font-bold text-xl hover:scale-105 transition-transform shadow-lg"
                   >
                     {gameState.currentPuzzle < gameState.puzzles.length - 1
                       ? "Next Puzzle ➜"

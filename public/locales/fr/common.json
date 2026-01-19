@@ -5,7 +5,9 @@
     "games": "Jeux",
     "about": "À propos",
     "login": "Connexion",
-    "register": "S'inscrire"
+    "register": "S'inscrire",
+    "logout": "Déconnexion"
+
   },
   "sidebar": {
     "home": "Accueil",
@@ -19,5 +21,21 @@
     "title": "Découvre, Joue et Apprends",
     "subtitle":"Apprentissage interactif et amusant pour enfants entre 3 et 6 ans",
     "startButton": "Commencer l'aventure"
+  },
+    "learn": {
+    "title": "Que veux-tu apprendre aujourd'hui?",
+    "subtitle": "Choisis une case pour commencer votre aventure !",
+    "shapes": "Formes",
+    "animals": "Animaux",
+    "numbers": "Nombres",
+    "colors": "Couleurs",
+    "alphabet": "Alphabet",
+    "weather": "Météo",
+    "food": "Aliments",
+    "transportation": "Transports",
+    "locked": "Se connecter pour débloquer",
+    "statusInProgress": "En cours",
+    "statusCompleted": "Completé",
+    "statusNotStarted": "Pas commencé"
   }
 }

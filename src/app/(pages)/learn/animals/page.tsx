@@ -1,10 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ProgressBar from "@/app/components/progressBar/progress-bar";
 import Celebration from "@/app/components/celebration/celebration";
 import AnimalMemoryGame from "./animal-memory-game";
 import RabbitGame from "./rabbit-game";
+import { useAuth } from "@/app/hooks/useAuth";
+import { progressService } from "@/lib/progressService";
 
 interface Animal {
   id: number;
@@ -254,6 +256,33 @@ export default function AnimalsPage() {
     useState(false);
   const [isPlayingRabbitGame, setIsPlayingRabbitGame] = useState(false);
 
+  const {user, loading} = useAuth()
+
+  // Fetch saved progress on mount
+  useEffect(() => {
+    const fetchProgress = async () => {
+      try {
+        // setLoading(true);
+        const response = await progressService.getLessonProgress("animals");
+
+        if (response.success && response.progress) {
+          const savedIndex = response.progress.lastPhaseIndex;
+          // setLastSavedPhaseIndex(savedIndex);
+
+          // Initialize at saved position
+          const safeIndex = Math.min(savedIndex, allPhases.length - 1);
+          setCurrentStep(safeIndex);
+          if (savedIndex === allPhases.length) setShowCelebration(true);
+        }
+      } catch (error) {
+        console.error("Error loading progress:", error);
+      } finally {
+        // setLoading(false);
+      }
+    };
+    if (!loading && user) fetchProgress();
+  }, [loading, user]);
+
   const current = allPhases[currentStep];
   const isRecognition =
     currentStep < learningAnimals.length + recognitionAnimals.length &&
@@ -280,11 +309,43 @@ export default function AnimalsPage() {
     return "habitat";
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     setFeedback("");
+    // Calculate next phase index
+    const nextPhaseIndex = currentStep + 1;
+
+    // Update progress on backend
+    if (user) {
+      // Only update if user is logged in
+      try {
+        await progressService.updateLessonProgress("animals", {
+          phaseIndex: nextPhaseIndex, // Send the NEXT phase index
+          totalPhases: allPhases.length,
+        });
+
+        console.log("Progress updated successfully");
+      } catch (error) {
+        console.error("Failed to update progress:", error);
+        // Continue anyway - don't block user from proceeding
+      }
+    }
+
+    // Move to next step in UI
     if (currentStep < allPhases.length - 1) {
-      setCurrentStep((s) => s + 1);
+      setCurrentStep(nextPhaseIndex);
     } else {
+      // Lesson completed - also update progress one more time
+      if (user) {
+        try {
+          // Mark as completed
+          await progressService.updateLessonProgress("animals", {
+            phaseIndex: allPhases.length, // Last index
+            totalPhases: allPhases.length,
+          });
+        } catch (error) {
+          console.error("Failed to mark lesson as completed:", error);
+        }
+      }
       setShowCelebration(true);
     }
   };

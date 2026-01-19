@@ -5,7 +5,8 @@
     "games": "Games",
     "about": "About",
     "login": "Login",
-    "register": "register"
+    "register": "Register",
+    "logout": "Logout"
   },
   "sidebar": {
     "home": "Home",
@@ -19,5 +20,21 @@
     "title": "Discover, Play and Learn",
     "subtitle": "Fun interactive learning for children ages 3 - 6",
     "startButton": "Start the adventure"
+  },
+  "learn": {
+    "title": "What do you want to learn today?",
+    "subtitle": "Tap a box to start your adventure!",
+    "shapes": "Shapes",
+    "animals": "Animals",
+    "numbers": "Numbers",
+    "colors": "Colors",
+    "alphabet": "Alphabet",
+    "weather": "Weather",
+    "food": "Food",
+    "transportation": "Transportation",
+    "locked": "Login to unlock",
+    "statusInProgress": "In progress",
+    "statusCompleted": "Completed",
+    "statusNotStarted": "Not started"
   }
 }

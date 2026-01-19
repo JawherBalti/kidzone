@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import SuccessModal from "@/app/components/successModal/success-modal";
 import GameoverModal from "@/app/components/gamoverModal/gameover-modal";
+import { usePathname } from "next/navigation";
 
 interface Balloon {
   id: number;
@@ -22,7 +23,7 @@ interface Bullet {
   active: boolean;
 }
 
-export default function PopBubble({ setIsPlayingPopTheBaloon }: any) {
+export default function PopBubble({ setIsPlayingPopTheBaloon, onClose }: any) {
   // Game states
   const [gameState, setGameState] = useState<
     "playing" | "success" | "gameover"
@@ -42,6 +43,8 @@ export default function PopBubble({ setIsPlayingPopTheBaloon }: any) {
   const keysRef = useRef<{ [key: string]: boolean }>({});
   const elevatorPositionRef = useRef(elevatorPosition);
   const canShootRef = useRef(true);
+
+  const pathname = usePathname();
 
   // Game levels configuration
   const gameLevels: any = {
@@ -421,17 +424,21 @@ export default function PopBubble({ setIsPlayingPopTheBaloon }: any) {
               Reset
             </button>
             <button
-              onClick={() => setIsPlayingPopTheBaloon(false)}
+              onClick={
+                pathname.includes("play")
+                  ? () => onClose && onClose()
+                  : () => setIsPlayingPopTheBaloon(false)
+              }
               className="w-full py-2 md:py-3 bg-gradient-to-r from-green-400 to-blue-400 text-white text-md rounded-full font-bold hover:scale-105 transition-transform shadow-lg"
             >
-              Back to learning
+              {pathname.includes("play") ? "Back to games" : "Back to learning"}{" "}
             </button>
           </div>
 
           <div className="flex-1 mx-auto h-full">
             <div
               ref={gameAreaRef}
-              className="relative bg-gradient-to-b from-blue-950 via-blue-900 to-purple-800 rounded-3xl shadow-2xl border-4 border-yellow-400 h-full overflow-hidden"
+              className="relative bg-gradient-to-b from-blue-950 via-blue-900 to-purple-800 rounded-3xl shadow-2xl border-4 border-green-400 h-full overflow-hidden"
             >
               {/* Animated Cloud Background */}
               <div className="absolute inset-0">
@@ -612,6 +619,8 @@ export default function PopBubble({ setIsPlayingPopTheBaloon }: any) {
           score={score}
           resetGame={resetGame}
           setIsPlayingGame={setIsPlayingPopTheBaloon}
+          pathname={pathname}
+          onClose={onClose}
         />
       ) : gameState === "success" ? (
         <SuccessModal

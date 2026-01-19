@@ -8,7 +8,7 @@ let initialized = false;
 export async function initI18n(lang = "en", ns = "common") {
     if (!lang) {
         const cookieStore = await cookies();
-        lang = cookieStore.get("NEXT_LOCALE")?.value || "en";
+        lang = cookieStore.get("i18next")?.value || cookieStore.get("NEXT_LOCALE")?.value || "en";
     }
 
     if (!initialized) {
